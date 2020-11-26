@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm")
     `maven-publish`
+    id("org.openjfx.javafxplugin")
+
 }
 java.sourceCompatibility = JavaVersion.VERSION_11
 
@@ -43,5 +45,9 @@ publishing {
     }
 }
 
-
+javafx {
+    version = "15.0.1"
+    modules("javafx.controls", "javafx.fxml")
+    configuration = "compileOnly"
+}
 
