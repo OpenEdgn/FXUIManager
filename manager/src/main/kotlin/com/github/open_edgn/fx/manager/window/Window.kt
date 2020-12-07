@@ -2,6 +2,8 @@ package com.github.open_edgn.fx.manager.window
 
 import com.github.open_edgn.fx.manager.application.context.Context
 import com.github.open_edgn.fx.manager.application.context.InternalContext
+import javafx.stage.Stage
+import javafx.stage.Window
 
 
 /**
@@ -10,9 +12,19 @@ import com.github.open_edgn.fx.manager.application.context.InternalContext
 abstract class Window : InternalContext() {
 
     /**
+     * 得到JavaFX Window 对象
+     */
+    abstract val fxWindow: Window
+
+    /**
+     * 得到 JavaFX Stage 对象
+     */
+    abstract val fxStage: Stage
+
+    /**
      * 是否置于顶部
      */
-    abstract var alwaysOnTop: Boolean
+    abstract var isAlwaysOnTop: Boolean
 
     /**
      * 是否全屏与控制全屏
@@ -48,5 +60,15 @@ abstract class Window : InternalContext() {
     /**
      * 窗口标题
      */
-    abstract var title:String
+    abstract var title: String
+
+    /**
+     * 窗口是否为最大
+     */
+    abstract var isMaximized: Boolean
+
+    /**
+     * 窗口大小是否可变
+     */
+    abstract var isResizable: Boolean
 }

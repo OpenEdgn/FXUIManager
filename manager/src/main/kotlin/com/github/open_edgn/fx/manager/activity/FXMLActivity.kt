@@ -1,5 +1,6 @@
 package com.github.open_edgn.fx.manager.activity
 
+import com.github.open_edgn.fx.manager.InternalObjects
 import javafx.fxml.FXMLLoader
 import javafx.fxml.JavaFXBuilderFactory
 import javafx.scene.Node
@@ -7,10 +8,18 @@ import javafx.util.Callback
 import java.net.URL
 
 abstract class FXMLActivity<T : Node> : Activity<T>() {
-    abstract val fxmlPath: String
-    open val stylePaths: Array<String> = arrayOf()
+    protected open val iconPath: String = ""
+    protected abstract val fxmlPath: String
+    protected open val stylePaths: Array<String> = arrayOf()
     override val styles: Array<URL> by lazy {
         stylePaths.map { javaClass.getResource(it) }.toTypedArray()
+    }
+    override val icon: URL by lazy {
+        if (iconPath.isEmpty()) {
+            InternalObjects.fxBoot.icon
+        } else {
+            javaClass.getResource(iconPath)
+        }
     }
     override val root by lazy {
         val fxmlLoader = FXMLLoader()

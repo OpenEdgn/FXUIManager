@@ -1,5 +1,6 @@
 package com.github.open_edgn.fx.manager.activity
 
+import com.github.openEdgn.logger4k.LoggerFactory
 import com.github.open_edgn.fx.manager.InternalObjects
 import com.github.open_edgn.fx.manager.activity.event.IActivityEvent
 import com.github.open_edgn.fx.manager.application.context.InternalContext
@@ -14,7 +15,11 @@ import java.net.URL
  */
 abstract class Activity<T : Node> : InternalContext(), IActivityEvent, IParent<T> {
 
-    override val icon: URL = javaClass.getResource("/icon/icon.png")
+    protected val logger = LoggerFactory.getLogger(javaClass)
+
+    override val icon: URL by lazy {
+        InternalObjects.fxBoot.icon
+    }
 
     override val styles: Array<URL> = arrayOf()
 

@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
-    `maven-publish`
     id("org.openjfx.javafxplugin")
 }
 java.sourceCompatibility = JavaVersion.VERSION_11
@@ -30,20 +29,6 @@ tasks.test {
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.jvmTarget = "11"
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = rootProject.group.toString()
-            artifactId = project.name
-            version = rootProject.version.toString()
-            from(components["java"])
-        }
-    }
-    repositories {
-        mavenLocal()
-    }
 }
 
 javafx {

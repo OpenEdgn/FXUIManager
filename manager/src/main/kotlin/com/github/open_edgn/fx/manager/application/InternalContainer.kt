@@ -16,6 +16,8 @@ import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.image.Image
+import javafx.scene.layout.Background
+import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
@@ -23,7 +25,6 @@ import javafx.stage.Stage
 import java.lang.RuntimeException
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.math.log
 import kotlin.reflect.KClass
 import kotlin.system.exitProcess
 
@@ -45,6 +46,7 @@ object InternalContainer : IContainer, IWindowEvent {
         root.alignment = Pos.CENTER
         val sce = Scene(root)
         sce.fill = Color.TRANSPARENT
+        root.background = Background(BackgroundFill(Color.TRANSPARENT,null,null))
         sce
     }
     private lateinit var stage: Stage
@@ -66,7 +68,6 @@ object InternalContainer : IContainer, IWindowEvent {
         stage.show()
         logger.trace("UI 已展示.")
     }
-
 
     private val headActivity: Activity<out Node>?
         get() = synchronized(activityList) {
@@ -135,11 +136,19 @@ object InternalContainer : IContainer, IWindowEvent {
         stage.icons.removeAll()
         logger.trace("展示活动 {}.", activity.javaClass.simpleName)
         stage.icons.add(Image(activity.icon.openStream()))
+        scene.stylesheets.addAll(InternalObjects.fxBoot.styles.map { it.toExternalForm() })
         scene.stylesheets.addAll(activity.styles.map { it.toExternalForm() })
         activity.window = window
         bindWindowEvent = activity is IWindowEvent
+
         activity.runUiOnThread {
             event(activity)
+            if (!stage.isMaximized) {
+                stage.width = parent.prefWidth(0.0)
+                stage.height = parent.prefHeight(0.0)
+            }
+            stage.minHeight = parent.minHeight(0.0)
+            stage.minWidth = parent.minWidth(0.0)
             activity.onStart()
         }
         window.title = activity.title
@@ -151,16 +160,17 @@ object InternalContainer : IContainer, IWindowEvent {
 
     @Synchronized
     override fun destroy(activityClass: KClass<out Activity<*>>) {
+        if (activityList.size >= 2) {
+            flushActivity(activityList[1]) {}
+        }
         val remove = activities.remove(activityClass) ?: return
         synchronized(activityList) {
             activityList.remove(remove)
         }
-        if (!activityList.isEmpty()) {
-            flushActivity(activityList.first) {}
+        logger.trace("开始销毁活动 {}.", activityClass.simpleName)
+        remove.runUiOnThread { remove.onDestroy()
+            logger.trace("销毁活动 {} 完成.", activityClass.simpleName)
         }
-        logger.trace("销毁活动 {}.", activityClass.simpleName)
-
-        remove.runUiOnThread { remove.onDestroy() }
         if (activityList.isEmpty()) {
             logger.trace("活动 {} 已为最后活动，程序退出.", activityClass.simpleName)
             stage.close()
@@ -168,7 +178,7 @@ object InternalContainer : IContainer, IWindowEvent {
     }
 
     override fun containerDestroy() {
-        logger.trace("窗口销毁.")
+        logger.trace("触发窗口销毁.")
         synchronized(activityList) {
             headActivity?.run {
                 runUiOnThread {
@@ -178,6 +188,8 @@ object InternalContainer : IContainer, IWindowEvent {
             for (activity in activityList) {
                 activity.runUiOnThread {
                     activity.onDestroy()
+                    logger.trace("栈底活动 {} 已销毁.",activity::class.simpleName)
+
                 }
             }
         }
@@ -202,7 +214,6 @@ object InternalContainer : IContainer, IWindowEvent {
             (headActivity as IWindowEvent).onReSize(window)
         }
     }
-
 
     internal class BootContext : InternalContext() {
         override val name: String = "Boot"

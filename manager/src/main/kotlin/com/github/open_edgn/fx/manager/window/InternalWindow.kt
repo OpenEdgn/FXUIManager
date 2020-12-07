@@ -7,13 +7,18 @@ internal class InternalWindow(private val stage: Stage) : Window() {
 
     override val name: String = javaClass.name
 
+    override val fxStage: Stage
+        get() = stage
+
+    override val fxWindow: javafx.stage.Window
+        get() = stage.scene.window
 
     init {
         stage.fullScreenExitHint = ""
         stage.fullScreenExitKeyCombination = KeyCombination.NO_MATCH
     }
 
-    override var alwaysOnTop: Boolean
+    override var isAlwaysOnTop: Boolean
         get() = stage.isAlwaysOnTop
         set(value) {
             stage.isAlwaysOnTop = value
@@ -57,5 +62,15 @@ internal class InternalWindow(private val stage: Stage) : Window() {
         get() = stage.title
         set(value) {
             stage.title = value
+        }
+    override var isMaximized: Boolean
+        get() = stage.isMaximized
+        set(value) {
+            stage.isMaximized = value
+        }
+    override var isResizable: Boolean
+        get() = stage.isResizable
+        set(value) {
+            stage.isResizable = value
         }
 }
