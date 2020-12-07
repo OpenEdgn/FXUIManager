@@ -20,7 +20,7 @@ java{
 dependencies {
     implementation(kotlin("reflect"))
     implementation(kotlin("stdlib"))
-    api("com.github.OpenEdgn.Logger4K:core:1.0.4")
+    api("com.github.OpenEdgn.Logger4K:core:0cda6f05f7")
     testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
     testImplementation("org.junit.platform:junit-platform-launcher:1.6.2")
 }

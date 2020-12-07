@@ -15,7 +15,7 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation(kotlin("stdlib"))
     implementation(project(":manager"))
-    implementation("com.github.OpenEdgn.Logger4K:logger-console:1.0.4")
+    implementation("com.github.OpenEdgn.Logger4K:logger-console:0cda6f05f7")
     testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
     testImplementation("org.junit.platform:junit-platform-launcher:1.6.2")
 }

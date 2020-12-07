@@ -4,7 +4,7 @@ module fx.ui.manager {
     requires javafx.fxml;
     requires javafx.graphics;
     requires javafx.base;
-    requires core;
+    requires logger4k.core;
     exports com.github.open_edgn.fx.manager;
     opens com.github.open_edgn.fx.manager;
     exports com.github.open_edgn.fx.manager.activity;
