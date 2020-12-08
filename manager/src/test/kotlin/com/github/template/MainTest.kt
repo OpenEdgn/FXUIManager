@@ -12,6 +12,5 @@ internal class MainTest {
 
     @Test
     fun testMain() {
-        main()
     }
 }
