@@ -1,15 +1,11 @@
 group = "com.github.openEDGN." + rootProject.name
-// 你可以修改此为自己的组织地址
 version = "1.0"
-// 你可以指定此为项目 版本号
-plugins{
-    id("org.openjfx.javafxplugin") version "0.0.9" apply  false
+plugins {
+    id("org.openjfx.javafxplugin") version "0.0.9" apply false
 }
 
-
-
 buildscript {
-    repositories{
+    repositories {
         mavenLocal()
         maven { url = project.uri("https://maven.aliyun.com/repository/public/") }
         jcenter()
@@ -23,7 +19,7 @@ buildscript {
 }
 
 allprojects {
-    repositories{
+    repositories {
         mavenLocal()
         maven { url = project.uri("https://maven.aliyun.com/repository/public/") }
         jcenter()
