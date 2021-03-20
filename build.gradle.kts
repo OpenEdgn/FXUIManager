@@ -1,5 +1,6 @@
-group = "com.github.openEDGN." + rootProject.name
-version = "1.0"
+group = "com.github.openEDGN"
+version = "last"
+
 plugins {
     id("org.openjfx.javafxplugin") version "0.0.9" apply false
 }
@@ -13,8 +14,10 @@ buildscript {
         maven { url = project.uri("https://jitpack.io") }
     }
 
+    val kotlinVersion: String by rootProject
+
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 

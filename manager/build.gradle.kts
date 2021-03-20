@@ -14,13 +14,19 @@ compileJava.destinationDir = compileKotlin.destinationDir
 
 java{
     withSourcesJar()
+    modularity.inferModulePath.set(true)
+
 }
 
 
 dependencies {
+    val logger4kVersion:String by rootProject
     implementation(kotlin("reflect"))
     implementation(kotlin("stdlib"))
-    api("com.github.OpenEdgn.Logger4K:core:0cda6f05f7")
+    api("com.github.OpenEdgn.Logger4K:core:$logger4kVersion"){
+        exclude("org.jetbrains.kotlin","kotlin-reflect")
+        exclude("org.jetbrains.kotlin","kotlin-stdlib")
+    }
     testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
     testImplementation("org.junit.platform:junit-platform-launcher:1.6.2")
 }

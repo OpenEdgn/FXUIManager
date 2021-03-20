@@ -1,4 +1,0 @@
-package icon;
-
-class Empty {
-}
